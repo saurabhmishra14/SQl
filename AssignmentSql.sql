@@ -81,8 +81,10 @@ FROM employees AS e
 WHERE e.location="Pune";
 
 SELECT  *
-FROM employees AS e, employee_info AS ei
-WHERE e.empID=ei.empID
+FROM employees AS e
+INNER JOIN 
+employee_info AS ei
+ON e.empID=ei.empID
 ORDER BY e.empID;
 
 SELECT  *
