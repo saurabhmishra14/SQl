@@ -23,8 +23,10 @@ INSERT INTO employees(desgination,salarly,location) VALUE ("Software Developer I
 ("Data Scientist",55000,"Pune"),
 ("CompanySecretry",65000,"Indore"),
 ("Principal Software Engineering",60000,"Delhi");
+
 SELECT * FROM employees;
 truncate table employee_info;
+
 INSERT INTO employee_info(name,empID,dob,city,state,gender) VALUE ("Saurabh Mishra",1,'1999-09-11',"Indore","Madhya Pradhesh","Male"),
 ("Deepak Shukla",2,'1998-01-14',"Amkarkatak","Madhya Pradhesh","Male"),
 ("Sarthak Jain",6,'1992-01-2',"Mumbai","Maharastra","Male"),
@@ -52,4 +54,8 @@ GROUP BY location;
  ORDER BY e.empID; 
  
  SELECT * FROM employees ORDER BY salarly DESC LIMIT 1 OFFSET 1;
+ 
+ SELECT * FROM employee_info
+WHERE name LIKE 'a%';
+
  
