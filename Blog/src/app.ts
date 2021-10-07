@@ -22,5 +22,5 @@ app.put('/:blogID', middleware.validateRequired, controller.editBlog);
 app.delete('/:blogID', middleware.validateRequired, controller.removeBlog);
 
 app.listen(port, () => {
-    console.log(`The server is running at http://localhost:${port}/ `);
+    console.log(`The server is running at http://localhost:${port}/  `);
 });
