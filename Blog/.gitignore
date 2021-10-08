@@ -1,5 +1,5 @@
 node_modules
 .env
 rough.ts
-dist
+dist/
 src/rough.ts
