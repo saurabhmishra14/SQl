@@ -7,6 +7,8 @@ const schemas = {
   }),
   blogID: Joi.object().keys({
     blogID: Joi.number().required()
-  })
+  }),
+  
 };
+
 export default schemas;

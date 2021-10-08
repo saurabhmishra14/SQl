@@ -1,29 +1,28 @@
 import schema from "../validator/schema";
-import services from "../services/blogFunc";
+import services from "../services/blogServices";
 import express, { Request, Response, Application, NextFunction } from "express";
 
 async function validateSchema(req: Request, res: Response, next: NextFunction) {
     try {
-            services.validate(req.body.title, req.body.description);
+        const results = await services.validateBlogs(req.body.title, req.body.description);
+        next();
     }
     catch (e) {
-        console.log("Error in the validate"+e);
+        res.send(`Error get caught! \n ${e}`);
     }
-
-    next();
 }
 
-function validateRequired(req: Request,res: Response,next: NextFunction){
+async function validateBlogID(req: Request, res: Response, next: NextFunction) {
     try {
-        services.validateID(+req.params.blogID);
+        await services.validateID(+req.params.blogID);
+        next();
+    }
+    catch (e) {
+        res.send(`Error get caught! \n ${e}`);
+    }
 }
-catch (e) {
-    console.log("Error in the validate"+e);
-}
-next();
-}
-
+ 
 export default {
     validateSchema,
-    validateRequired
+    validateBlogID
 }
