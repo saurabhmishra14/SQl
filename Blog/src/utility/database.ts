@@ -1,10 +1,11 @@
 import { Dialect, Sequelize } from "sequelize";
+import config from "../config/default";
 
-const DBNAME = process.env.DB_NAME as string;
-const DBUSER = process.env.DB_USER as string;
-const DBHOST = process.env.DB_HOST as string;
-const DBPASSWORD = process.env.DB_PASSWORD as string;
-const DBDIALECT = process.env.DB_DIALECT as Dialect;
+const DBNAME = config.DBNAME as string;
+const DBUSER = config.DBUSER as string;
+const DBHOST = config.DBHOST as string;
+const DBPASSWORD = config.DBPASSWORD as string;
+const DBDIALECT = config.DBDIALECT as Dialect;
 
 export const sequelizeConnection = new Sequelize(DBNAME, DBUSER, DBPASSWORD, {
   dialect: DBDIALECT,

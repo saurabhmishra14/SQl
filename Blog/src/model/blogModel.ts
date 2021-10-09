@@ -5,6 +5,7 @@ interface IBlogAttributes {
     blogID?: number;
     title: string;
     description: Text;
+    userID: number
 }
 
 export class BlogInstance extends Model<IBlogAttributes> { }
@@ -23,7 +24,11 @@ BlogInstance.init(
         description: {
             type: DataTypes.TEXT,
             allowNull: false
-        }
+        },
+        userID: {
+            type: DataTypes.INTEGER,
+            
+         }
     },
     {
         sequelize: sequelizeConnection,

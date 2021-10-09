@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import passwordComplexity from 'joi-password-complexity';
 
 const schemas = {
   blogPOST: Joi.object().keys({
@@ -8,6 +9,13 @@ const schemas = {
   blogID: Joi.object().keys({
     blogID: Joi.number().required()
   }),
+  userINFO: Joi.object().keys({
+    userName: Joi.string().min(4).required(),
+    password: passwordComplexity().required(),
+    email: Joi.string().min(4).required(),
+    firstName: Joi.string().min(4).required(),
+    lastName: Joi.string().required()
+  })
 
 };
 

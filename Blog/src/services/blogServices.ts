@@ -1,5 +1,27 @@
 import schemas from "../validator/schema";
 import { BlogInstance as Blog } from "../model/blogModel"
+import { UserInstance as User } from "../model/userModel"
+import { useInflection } from "sequelize/types";
+import bcrypt from "bcrypt";
+
+async function validateUserLogin(userName: string, password: string) {
+    const post = {
+        userName: userName,
+        password: password
+    };
+    return (schemas.userINFO.validateAsync(post));
+}
+
+async function validateUserDetails(userInformation: any) {
+    const post = {
+        userName: userInformation.userName,
+        password: userInformation.password,
+        firstName: userInformation.firstName,
+        lastName: userInformation.lastName,
+        email: userInformation.email
+    };
+    return (schemas.userINFO.validateAsync(post));
+}
 
 
 async function validateBlogs(title: string, description: string) {
@@ -17,10 +39,22 @@ async function validateID(blogID: Number) {
     return (schemas.blogID.validateAsync(post));
 }
 
-async function insertBlog(title: string, description: Text) {
+async function insertBlog(title: string, description: Text, userID: number) {
     return (Blog.create({
+        userID: userID,
         title: title,
         description: description
+    }));
+}
+
+async function insertUser(userInformation: any) {
+    const password = await encryption(userInformation.password);
+    return (User.create({
+        userName: userInformation.userName,
+        password: password,
+        firstName: userInformation.firstName,
+        lastName: userInformation.lastName,
+        email: userInformation.email
     }));
 }
 
@@ -43,6 +77,16 @@ async function getBlog(blogID: number) {
         }
     }));
 }
+
+async function verifyUser(userName: string,password: string) {
+    return (User.findOne({
+        where: {
+            userName: userName,
+            password: password
+        }
+    }));
+}
+
 
 async function updateBlog(blogID: number, title?: string, description?: Text) {
     if (typeof (title) === undefined) {
@@ -79,6 +123,18 @@ async function updateBlog(blogID: number, title?: string, description?: Text) {
             }));
 }
 
+
+async function encryption(password: string) {
+
+    return (bcrypt.hash(password, 10))
+}
+
+async function decryption(password: string) {
+
+    return (bcrypt.hash(password, 10))
+
+}
+
 export default {
     validateBlogs,
     validateID,
@@ -86,5 +142,10 @@ export default {
     deleteBlog,
     getBlog,
     getBlogs,
-    updateBlog
+    updateBlog,
+    validateUserLogin,
+    validateUserDetails,
+    insertUser,
+    encryption,
+    verifyUser
 }
