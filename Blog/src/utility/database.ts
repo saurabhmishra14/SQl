@@ -11,4 +11,3 @@ export const sequelizeConnection = new Sequelize(DBNAME, DBUSER, DBPASSWORD, {
   dialect: DBDIALECT,
   host: DBHOST,
 });
-

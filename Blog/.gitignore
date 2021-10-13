@@ -1,5 +1,5 @@
-node_modules
-.env
+*node_modules
 rough.ts
 dist/
-src/rough.ts
+src/rough.
+src/config/default.ts

@@ -1,10 +1,9 @@
 import schemas from "../validator/schema";
-import { BlogInstance as Blog } from "../model/blogModel"
-import { UserInstance as User } from "../model/userModel"
-import { useInflection } from "sequelize/types";
+import { BlogInstance as Blog } from "../model/blogModel";
+import { UserInstance as User } from "../model/userModel";
 import bcrypt from "bcrypt";
 
-async function validateUserLogin(userName: string, password: string) {
+function validateUserLogin(userName: string, password: string) {
     const post = {
         userName: userName,
         password: password
@@ -12,7 +11,7 @@ async function validateUserLogin(userName: string, password: string) {
     return (schemas.userINFO.validateAsync(post));
 }
 
-async function validateUserDetails(userInformation: any) {
+function validateUserDetails(userInformation: any) {
     const post = {
         userName: userInformation.userName,
         password: userInformation.password,
@@ -24,7 +23,7 @@ async function validateUserDetails(userInformation: any) {
 }
 
 
-async function validateBlogs(title: string, description: string) {
+function validateBlogs(title: string, description: string) {
     const post = {
         title: title,
         description: description
@@ -32,14 +31,14 @@ async function validateBlogs(title: string, description: string) {
     return (schemas.blogPOST.validateAsync(post));
 }
 
-async function validateID(blogID: Number) {
+function validateID(blogID: Number) {
     const post = {
         blogID: blogID
     };
     return (schemas.blogID.validateAsync(post));
 }
 
-async function insertBlog(title: string, description: Text, userID: number) {
+function insertBlog(title: string, description: Text, userID: number) {
     return (Blog.create({
         userID: userID,
         title: title,
@@ -58,19 +57,19 @@ async function insertUser(userInformation: any) {
     }));
 }
 
-async function deleteBlog(blogID: number) {
+function deleteBlog(userID: number) {
     return (Blog.destroy({
         where: {
-            blogID: blogID
+            userID: userID
         }
     }));
 }
 
-async function getBlogs() {
+function getBlogs() {
     return (Blog.findAll());
 }
 
-async function getBlog(blogID: number) {
+function getBlog(blogID: number) {
     return (Blog.findOne({
         where: {
             blogID: blogID
@@ -78,23 +77,22 @@ async function getBlog(blogID: number) {
     }));
 }
 
-async function verifyUser(userName: string,password: string) {
+function verifyUser(userName: string) {
     return (User.findOne({
         where: {
-            userName: userName,
-            password: password
+            userName: userName
         }
     }));
 }
 
 
-async function updateBlog(blogID: number, title?: string, description?: Text) {
+function updateBlog(userID: number, title?: string, description?: Text) {
     if (typeof (title) === undefined) {
         return (Blog.update({
             description: description
         }, {
             where: {
-                blogID: blogID
+                userID: userID
             }
         }));
     }
@@ -106,7 +104,7 @@ async function updateBlog(blogID: number, title?: string, description?: Text) {
 
             }, {
                 where: {
-                    blogID: blogID
+                    userID: userID
                 }
             }));
         }
@@ -117,23 +115,19 @@ async function updateBlog(blogID: number, title?: string, description?: Text) {
                 description: description
             }, {
                 where: {
-                    blogID: blogID
+                    userID: userID
 
                 }
             }));
 }
 
 
-async function encryption(password: string) {
+function encryption(password: string) {
 
     return (bcrypt.hash(password, 10))
 }
 
-async function decryption(password: string) {
 
-    return (bcrypt.hash(password, 10))
-
-}
 
 export default {
     validateBlogs,
@@ -147,5 +141,7 @@ export default {
     validateUserDetails,
     insertUser,
     encryption,
-    verifyUser
+    verifyUser,
+
+
 }
