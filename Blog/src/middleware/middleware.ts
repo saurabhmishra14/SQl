@@ -57,8 +57,6 @@ async function validateUserDetails(
 
       config.SECRET
     );
-    console.log(token);
-    next();
   } catch (e) {
     next(e);
   }
