@@ -1,8 +1,6 @@
 import services from "../services/blogServices";
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import config from "../config/default";
-
+import { Message as message } from "../constant/message";
 async function insertUser(req: Request, res: Response) {
   try {
     const userInformation: object = {
@@ -14,26 +12,23 @@ async function insertUser(req: Request, res: Response) {
     };
 
     await services.insertUser(userInformation);
-    res.send("Congratulation You are Sucessfully Register!");
+    res.send(message.registered);
   } catch (error) {
-    res.send(`Error get caught! \n ${error}`);
+    res.send(message.unregister + "\n" + error);
   }
 }
 
 async function postBlog(req: Request, res: Response) {
   try {
-    const token = req.body.token || req.headers.authorization?.split(" ")[1];
-    const decoded = jwt.verify(token, config.SECRET);
-    const userName = Object.values(decoded)[0];
-    const user: any = await services.verifyUser(userName);
+    const user = req.body.user;
     await services.insertBlog(
       req.body.title,
       req.body.description,
       user.userID
     );
-    res.send("Your Blog is Sucessfully Save!");
+    res.send(message.blogSaved);
   } catch (error) {
-    res.send(`Error get caught! \n ${error}`);
+    res.send(`${message.errorPostBlog} \n ${error}`);
   }
 }
 
@@ -42,67 +37,62 @@ async function readBlogs(_req: Request, res: Response) {
     const blogs = await services.getBlogs();
     res.send(blogs);
   } catch (error) {
-    res.send(`Error get caught! \n ${error}`);
+    res.send(`${message.unFetch} \n ${error}`);
   }
 }
 
 async function readBlog(req: Request, res: Response) {
   try {
-    const token = req.body.token || req.headers.authorization?.split(" ")[1];
-    const decoded = jwt.verify(token, config.SECRET);
-    const userName = Object.values(decoded)[0];
-    const user: any = await services.verifyUser(userName);
+    const user = req.body.user;
     const blog = await services.getBlog(user.userID);
     if (!blog) {
-      throw new Error("Blog with this user ID is not Present");
+      throw new Error(message.notFound);
     }
     res.send(blog);
   } catch (error) {
-    res.send(`Error get caught! \n ${error}`);
+    res.send(`${message.unFetch}\n ${error}`);
   }
 }
 
 async function removeBlog(req: Request, res: Response) {
   try {
-    const token = req.body.token || req.headers.authorization?.split(" ")[1];
-    const decoded = jwt.verify(token, config.SECRET);
-    const userName = Object.values(decoded)[0];
-    const user: any = await services.verifyUser(userName);
+    const user = req.body.user;
     if (!user) {
-      throw new Error("No user Found");
+      throw new Error(message.notFound);
     }
     const result = await services.deleteBlog(user.userID);
     if (!result) {
-      throw new Error("Blog is already deleted or not Present!");
+      throw new Error(message.Deleted);
     }
-    res.send("Sucessfully Deleted!");
+    res.send(message.blogDeleted);
   } catch (error) {
-    res.send(`Error get caught! \n ${error}`);
+    res.send(`${message.notDeleted} \n ${error}`);
   }
 }
 
 async function editBlog(req: Request, res: Response) {
   try {
-    const token = req.body.token || req.headers.authorization?.split(" ")[1];
-    const decoded = jwt.verify(token, config.SECRET);
-    const userName = Object.values(decoded)[0];
-    const user: any = await services.verifyUser(userName);
+    const user = req.body.user;
     if (!user) {
-      throw new Error("No user Found");
+      throw new Error(message.notFound);
     }
     await services.updateBlog(
       user.userID,
       req.body.title,
       req.body.description
     );
-    res.send("Sucessfully Updated!");
+    res.send(message.updated);
   } catch (error) {
-    res.send(`Error get caught! \n ${error}`);
+    res.send(`${message.cannotUpdate} \n ${error}`);
   }
 }
 
 async function blogLogin(_req: Request, res: Response) {
-  res.send("Welcome to Your Daily Blogging Account 🙏🏻");
+  try {
+    res.send(message.welcome);
+  } catch (error) {
+    res.send(`${message.unlogged} \n ${error}`);
+  }
 }
 
 export default {
