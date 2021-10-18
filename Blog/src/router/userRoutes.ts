@@ -1,5 +1,5 @@
 import middleware from "../middleware/middleware";
-import controller from "../controller/blogControllers";
+import controller from "../controller/blogcontrollers";
 import { Router } from "express";
 
 export const router: Router = Router();
