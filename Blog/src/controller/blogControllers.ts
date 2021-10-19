@@ -11,7 +11,7 @@ async function insertUser(req: Request, res: Response) {
       password: req.body.password,
     };
 
-    await services.insertUser(userInformation);
+   await services.insertUser(userInformation);
     res.send(message.registered);
   } catch (error) {
     res.send(message.unregister + "\n" + error);
