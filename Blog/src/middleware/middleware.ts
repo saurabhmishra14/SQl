@@ -116,20 +116,10 @@ async function authenticateToken(
   }
 }
 
-function fileUploading(req: Request, res: Response, next: NextFunction) {
-  try {
-    uploadServices.fileUploads();
-    next();
-  } catch (err) {
-    next(err);
-  }
-}
-
 export default {
   validateBlogSchema,
   validateBlogID,
   validateUserDetails,
   authenticateToken,
   authenticateLoginCredential,
-  fileUploading,
 };
