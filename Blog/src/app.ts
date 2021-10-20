@@ -3,7 +3,7 @@ import { sequelizeConnection as db } from "./utility/database";
 import config from "../src/config/default";
 import { router as blog } from "./router/blogRoutes";
 import { router as user } from "./router/userRoutes";
-
+import { router as upload } from "./router/uploadRoutes";
 const app: Application = express();
 const Port = config.PORT || 3000;
 app.use(express.json());
@@ -15,6 +15,7 @@ db.sync({
 
 app.use("/blog", blog);
 app.use("/user", user);
+app.use("/upload",upload);
 app.listen(Port, () => {
   console.log(`The server is running at http://localhost:${Port}/`);
 });

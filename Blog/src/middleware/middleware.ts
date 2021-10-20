@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "../config/default";
 import { Message as message } from "../constant/message";
+import uploadServices from "../services/uploadServices";
 
 async function validateBlogSchema(
   req: Request,
@@ -115,10 +116,20 @@ async function authenticateToken(
   }
 }
 
+function fileUploading(req: Request, res: Response, next: NextFunction) {
+  try {
+    uploadServices.fileUploads();
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
 export default {
   validateBlogSchema,
   validateBlogID,
   validateUserDetails,
   authenticateToken,
   authenticateLoginCredential,
+  fileUploading,
 };

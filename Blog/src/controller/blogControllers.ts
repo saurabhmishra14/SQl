@@ -95,6 +95,14 @@ async function blogLogin(_req: Request, res: Response) {
   }
 }
 
+function fileUpload(req: Request, res: Response){
+  try {
+    res.send(req.file);
+  } catch (error) {
+    res.send(error);
+  }
+}
+
 export default {
   postBlog,
   readBlog,
@@ -103,4 +111,5 @@ export default {
   editBlog,
   insertUser,
   blogLogin,
+  fileUpload
 };

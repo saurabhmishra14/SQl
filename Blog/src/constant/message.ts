@@ -14,5 +14,6 @@ export const Message = {
  updated: "Sucessfully Updated",
  cannotUpdate:"Sorry your blog is not sucessfully updated",
  welcome: "Welcome to Your Daily Blogging Account 🙏🏻",
- unlogged:"Sorry,you are not login in your Blogging Account"
+ unlogged:"Sorry,you are not login in your Blogging Account",
+ errUploading:"'Please upload a file with extension png OR jpg OR jpeg'"
 }
