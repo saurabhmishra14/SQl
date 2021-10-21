@@ -4,10 +4,13 @@ import config from "../src/config/default";
 import { router as blog } from "./router/blogRoutes";
 import { router as user } from "./router/userRoutes";
 import { router as upload } from "./router/uploadRoutes";
+import ejs from "ejs";
+
 const app: Application = express();
 const Port = config.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.set("view engine", "ejs");
 
 db.sync({
   alter: true,

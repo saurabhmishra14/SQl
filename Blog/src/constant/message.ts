@@ -2,7 +2,7 @@ export const Message = {
  inputRequired: "All input is required!",
  invalid: "UserName with this password is not found!",
  tokenRequired: "A token is required for authentication!",
- registered: "Congratulation You are Sucessfully Register! 💫",
+ registered: "Congratulation You are Sucessfully Registered! 💫",
  unregister: "Sorry, User is not Successfully Register. ",
  blogSaved: "Your Blog is sucessfully Saved. ",
  errorPostBlog: "Sorry, your Blog is not Saved ",

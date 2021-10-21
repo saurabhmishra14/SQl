@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "../config/default";
 import { Message as message } from "../constant/message";
-import uploadServices from "../services/uploadServices";
+import userServices from "../services/userServices";
 
 async function validateBlogSchema(
   req: Request,
@@ -116,10 +116,23 @@ async function authenticateToken(
   }
 }
 
+async function emailAuthentication( _req: Request,
+  _res: Response,
+  next: NextFunction
+) {
+  try {
+    await userServices.transporter().verify();
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
 export default {
   validateBlogSchema,
   validateBlogID,
   validateUserDetails,
   authenticateToken,
   authenticateLoginCredential,
+  emailAuthentication
 };
