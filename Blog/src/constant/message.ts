@@ -2,7 +2,7 @@ export const Message = {
  inputRequired: "All input is required!",
  invalid: "UserName with this password is not found!",
  tokenRequired: "A token is required for authentication!",
- registered: "Congratulation You are Sucessfully Register! 💫",
+ registered: "Congratulation You are Sucessfully Registered! 💫",
  unregister: "Sorry, User is not Successfully Register. ",
  blogSaved: "Your Blog is sucessfully Saved. ",
  errorPostBlog: "Sorry, your Blog is not Saved ",
@@ -14,5 +14,6 @@ export const Message = {
  updated: "Sucessfully Updated",
  cannotUpdate:"Sorry your blog is not sucessfully updated",
  welcome: "Welcome to Your Daily Blogging Account 🙏🏻",
- unlogged:"Sorry,you are not login in your Blogging Account"
+ unlogged:"Sorry,you are not login in your Blogging Account",
+ errUploading:"'Please upload a file with extension png OR jpg OR jpeg'"
 }
