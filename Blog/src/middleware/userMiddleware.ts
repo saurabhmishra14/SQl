@@ -1,39 +1,9 @@
-import services from "../services/blogServices";
 import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "../config/default";
 import { Message as message } from "../constant/message";
 import userServices from "../services/userServices";
-
-async function validateBlogSchema(
-  req: Request,
-  _res: Response,
-  next: NextFunction
-) {
-  try {
-    const results = await services.validateBlogs(
-      req.body.title,
-      req.body.description
-    );
-    next();
-  } catch (e) {
-    next(e);
-  }
-}
-
-async function validateBlogID(
-  req: Request,
-  _res: Response,
-  next: NextFunction
-) {
-  try {
-    await services.validateID(+req.params.blogID);
-    next();
-  } catch (e) {
-    next(e);
-  }
-}
 
 async function validateUserDetails(
   req: Request,
@@ -49,14 +19,18 @@ async function validateUserDetails(
       password: req.body.password,
     };
 
-    await services.validateUserDetails(userInformation);
+    await userServices.validateUserDetails(userInformation);
     const token = jwt.sign(
       {
         userName: userInformation.userName,
         email: userInformation.email,
       },
-      config.SECRET
+      config.SECRET,
+      {
+        expiresIn: "1d",
+      }
     );
+    req.body.token = token;
     next();
   } catch (e) {
     next(e);
@@ -76,7 +50,7 @@ async function authenticateLoginCredential(
       throw new Error(message.inputRequired);
     }
 
-    const user: any = await services.verifyUser(userName);
+    const user: any = await userServices.verifyUser(userName);
     const verifyPassword = await bcrypt.compare(password, user.password);
 
     if (!(user && verifyPassword)) {
@@ -87,7 +61,10 @@ async function authenticateLoginCredential(
       {
         userName: userName,
       },
-      config.SECRET
+      config.SECRET,
+      {
+        expiresIn: '1d'
+      }
     );
     req.body.token = token;
     next();
@@ -108,7 +85,7 @@ async function authenticateToken(
   try {
     const decoded = jwt.verify(token, config.SECRET);
     const userName = Object.values(decoded)[0];
-    const user: any = await services.verifyUser(userName);
+    const user: any = await userServices.verifyUser(userName);
     req.body.user = user;
     next();
   } catch (err) {
@@ -116,7 +93,8 @@ async function authenticateToken(
   }
 }
 
-async function emailAuthentication( _req: Request,
+async function emailAuthentication(
+  _req: Request,
   _res: Response,
   next: NextFunction
 ) {
@@ -129,10 +107,8 @@ async function emailAuthentication( _req: Request,
 }
 
 export default {
-  validateBlogSchema,
-  validateBlogID,
   validateUserDetails,
   authenticateToken,
   authenticateLoginCredential,
-  emailAuthentication
+  emailAuthentication,
 };

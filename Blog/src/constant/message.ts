@@ -15,5 +15,13 @@ export const Message = {
  cannotUpdate:"Sorry your blog is not sucessfully updated",
  welcome: "Welcome to Your Daily Blogging Account 🙏🏻",
  unlogged:"Sorry,you are not login in your Blogging Account",
- errUploading:"'Please upload a file with extension png OR jpg OR jpeg'"
+ errUploading:"'Please upload a file with extension png OR jpg OR jpeg'",
+ bookDetails: "Congratulation Your Book Details are sucessfully Save",
+ bookDetailsDeleted:"Your Book Details is sucessfully Deleted",
+ cannotEdit:"You cannot edit someone else blog",
+ blogNotFound:'Blog with this BlogID is not Present',
+ cannotDeleteElse:'You cannot Delete someone else blog',
+ bookNotPresent: 'No Book Present with this book ID',
+ bookNotDeleted: "You cannot change Someone else book review",
+ bookEdited: "Your changes are recorded"
 }

@@ -1,36 +1,6 @@
 import services from "../services/blogServices";
-import userServices from "../services/userServices";
 import { Request, Response } from "express";
 import { Message as message } from "../constant/message";
-import ejs from "ejs";
-
-async function insertUser(req: Request, res: Response) {
-  try {
-    const userInformation: object = {
-      userName: req.body.userName,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      password: req.body.password,
-    };
-
-    await services.insertUser(userInformation);
-    res.send(message.registered);
-    ejs.renderFile(__dirname + "/../view/email.ejs", { name: req.body.firstName }, function (err, data) {
-      var mainOptions = {
-        from: 'saurabh@newput.com',
-        to: req.body.email,
-        subject: 'Welcome Mail',
-        html: data
-      };
-      userServices.transporter().sendMail(mainOptions, function (err, info) {
-        console.log('Message sent: ' + info.response);
-      });
-    })
-  } catch (error) {
-    res.send(message.unregister + "\n" + error);
-  }
-}
 
 async function postBlog(req: Request, res: Response) {
   try {
@@ -74,11 +44,23 @@ async function removeBlog(req: Request, res: Response) {
     if (!user) {
       throw new Error(message.notFound);
     }
-    const result = await services.deleteBlog(user.userID);
-    if (!result) {
-      throw new Error(message.Deleted);
+    const userID = user.userID;
+    const blogID = +req.params.blogID;
+    const blog: any = await services.findBlog(blogID);
+    if (!blog) {
+      throw new Error(message.blogNotFound);
     }
-    res.send(message.blogDeleted);
+    const userID1 = blog.userID;
+    if (userID === userID1) {
+      const result = await services.deleteBlog(blogID);
+      if (!result) {
+        throw new Error(message.Deleted);
+      }
+      res.send(message.blogDeleted);
+    }
+    else{
+      throw new Error(message.cannotDeleteElse);
+    }
   } catch (error) {
     res.send(`${message.notDeleted} \n ${error}`);
   }
@@ -90,22 +72,21 @@ async function editBlog(req: Request, res: Response) {
     if (!user) {
       throw new Error(message.notFound);
     }
-    await services.updateBlog(
-      user.userID,
-      req.body.title,
-      req.body.description
-    );
-    res.send(message.updated);
+    const userID = user.userID;
+    const blogID = +req.params.blogID;
+    const blog: any = await services.findBlog(blogID);
+    if (!blog) {
+      throw new Error(message.blogNotFound);
+    }
+    const userID1 = blog.userID;
+    if (userID === userID1) {
+      await services.updateBlog(blogID, req.body.title, req.body.description);
+      res.send(message.updated);
+    } else {
+      throw new Error(message.cannotEdit);
+    }
   } catch (error) {
     res.send(`${message.cannotUpdate} \n ${error}`);
-  }
-}
-
-async function blogLogin(_req: Request, res: Response) {
-  try {
-    res.send(message.welcome);
-  } catch (error) {
-    res.send(`${message.unlogged} \n ${error}`);
   }
 }
 
@@ -117,15 +98,11 @@ function fileUpload(req: Request, res: Response) {
   }
 }
 
-
-
 export default {
   postBlog,
   readBlog,
   readBlogs,
   removeBlog,
   editBlog,
-  insertUser,
-  blogLogin,
-  fileUpload
+  fileUpload,
 };

@@ -1,26 +1,6 @@
 import schemas from "../validator/schema";
 import { BlogInstance as Blog } from "../model/blogModel";
-import { UserInstance as User } from "../model/userModel";
 import bcrypt from "bcrypt";
-
-function validateUserLogin(userName: string, password: string) {
-  const post = {
-    userName: userName,
-    password: password,
-  };
-  return schemas.userINFO.validateAsync(post);
-}
-
-function validateUserDetails(userInformation: any) {
-  const post = {
-    userName: userInformation.userName,
-    password: userInformation.password,
-    firstName: userInformation.firstName,
-    lastName: userInformation.lastName,
-    email: userInformation.email,
-  };
-  return schemas.userINFO.validateAsync(post);
-}
 
 function validateBlogs(title: string, description: string) {
   const post = {
@@ -28,6 +8,14 @@ function validateBlogs(title: string, description: string) {
     description: description,
   };
   return schemas.blogPOST.validateAsync(post);
+}
+
+function validateChangedBlogs(title: string, description: string) {
+  const post = {
+    title: title,
+    description: description,
+  };
+  return schemas.blogPOST1.validateAsync(post);
 }
 
 function validateID(blogID: Number) {
@@ -45,21 +33,10 @@ function insertBlog(title: string, description: Text, userID: number) {
   });
 }
 
-async function insertUser(userInformation: any) {
-  const password = await encryption(userInformation.password);
-  return User.create({
-    userName: userInformation.userName,
-    password: password,
-    firstName: userInformation.firstName,
-    lastName: userInformation.lastName,
-    email: userInformation.email,
-  });
-}
-
-function deleteBlog(userID: number) {
+function deleteBlog(blogID: number) {
   return Blog.destroy({
     where: {
-      userID: userID,
+      blogID: blogID,
     },
   });
 }
@@ -76,15 +53,7 @@ function getBlog(blogID: number) {
   });
 }
 
-function verifyUser(userName: string) {
-  return User.findOne({
-    where: {
-      userName: userName,
-    },
-  });
-}
-
-function updateBlog(userID: number, title?: string, description?: Text) {
+function updateBlog(blogID: number, title?: string, description?: Text) {
   if (typeof title === undefined) {
     return Blog.update(
       {
@@ -92,7 +61,7 @@ function updateBlog(userID: number, title?: string, description?: Text) {
       },
       {
         where: {
-          userID: userID,
+          blogID: blogID,
         },
       }
     );
@@ -103,7 +72,7 @@ function updateBlog(userID: number, title?: string, description?: Text) {
       },
       {
         where: {
-          userID: userID,
+          blogID: blogID,
         },
       }
     );
@@ -115,7 +84,7 @@ function updateBlog(userID: number, title?: string, description?: Text) {
       },
       {
         where: {
-          userID: userID,
+          blogID: blogID,
         },
       }
     );
@@ -125,17 +94,23 @@ function encryption(password: string) {
   return bcrypt.hash(password, 10);
 }
 
+function findBlog(blogID: number){
+  return Blog.findOne({
+    where:{
+      blogID: blogID
+    }
+  })
+}
+
 export default {
   validateBlogs,
+  validateChangedBlogs,
   validateID,
   insertBlog,
   deleteBlog,
   getBlog,
   getBlogs,
   updateBlog,
-  validateUserLogin,
-  validateUserDetails,
-  insertUser,
   encryption,
-  verifyUser,
+  findBlog
 };
