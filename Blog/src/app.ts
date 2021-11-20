@@ -33,7 +33,7 @@ const swaggerOptions = {
       },
     },
   },
-  apis: ["./src/swagger.ts"],
+  apis: ["./src/swagger1.yaml"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
